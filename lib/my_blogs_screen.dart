@@ -88,7 +88,7 @@ class _MyStatefulWidgetState extends State<MyBlogs> {
           Divider(),
           Container(
             alignment: Alignment.centerLeft,
-            child: Text(record['post_content']),
+            child: Text("Content:  " + record['post_content']),
           ),
           SizedBox(
             height: 8.0,

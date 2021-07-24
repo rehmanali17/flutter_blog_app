@@ -46,6 +46,7 @@ class _LogInState extends State<LogIn> {
       if (json.decode(result.body)['result'].runtimeType == String) {
         showAlert(context, (json.decode(result.body))['result']);
       } else {
+        password = "";
         Navigator.push(
             context,
             MaterialPageRoute(

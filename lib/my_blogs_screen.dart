@@ -1,4 +1,5 @@
 import 'package:blog_app/edit_blog_screen.dart';
+import 'package:blog_app/my_single_blog_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -46,7 +47,7 @@ class _MyStatefulWidgetState extends State<MyBlogs> {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Container(
                 height: 20,
@@ -76,12 +77,20 @@ class _MyStatefulWidgetState extends State<MyBlogs> {
             height: 4.0,
           ),
           Divider(),
-          Container(
-            height: 230,
-            child: Image(
-              image: MemoryImage(base64Decode(record['post_image'])),
-            ),
-          ),
+          TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MySingleBlog(data: [widget.user, record])));
+              },
+              child: Container(
+                height: 230,
+                child: Image(
+                  image: MemoryImage(base64Decode(record['post_image'])),
+                ),
+              )),
           SizedBox(
             height: 4.0,
           ),

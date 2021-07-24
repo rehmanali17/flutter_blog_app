@@ -13,6 +13,8 @@ class Blog extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<Blog> {
+  TextEditingController _comment = TextEditingController();
+
   Future getSingleBlog() async {
     var id = widget.data[1]['post_id'];
     var response = await http
@@ -97,9 +99,53 @@ class _MyStatefulWidgetState extends State<Blog> {
         children: [
           Text(comment['u_name'] + ": " + comment['post_comment']),
           Divider(),
+          // SizedBox(
+          //   height: 10.0,
+          // ),
+          // Row(
+          //   children: [
+          //     TextField(
+          //         controller: _comment,
+          //         decoration: InputDecoration(
+          //             border: OutlineInputBorder(
+          //                 borderRadius: BorderRadius.circular(30.0)),
+          //             prefixIcon: Icon(Icons.alternate_email),
+          //             labelText: 'Email',
+          //             labelStyle: TextStyle(fontWeight: FontWeight.bold))),
+          //     SizedBox(
+          //       width: 7.0,
+          //     ),
+          //     IconButton(
+          //         onPressed: () {
+          //           if (_comment.text == "") {
+          //             showAlert(context, "Enter Comment First");
+          //           } else {
+          //             //
+          //           }
+          //         },
+          //         icon: Icon(Icons.arrow_back_rounded))
+          //   ],
+          // )
         ],
       ),
     );
+  }
+
+  void postComment(comment) async {
+    var user = widget.data[0]['u_id'];
+    var post = widget.data[1]['post_id'];
+    await http
+        .post(Uri.parse('http://localhost:3000/user/posts/postComment'),
+            headers: <String, String>{'Content-Type': 'application/json'},
+            body: json.encode({"comment": comment, "post": post, "user": user}))
+        .then((result) {
+      showAlert(context, (json.decode(result.body))['message']);
+      setState(() {
+        _comment..text = "";
+      });
+    }).catchError((error) {
+      showAlert(context, error);
+    });
   }
 
   showAlert(BuildContext context, msg) {
@@ -177,36 +223,44 @@ class _MyStatefulWidgetState extends State<Blog> {
                                 } else {
                                   List comments = snapshot.data;
                                   return Column(
-                                    children: comments
-                                        .map(
-                                          (comment) => SingleComment(comment),
-                                        )
-                                        .toList(),
+                                    children: comments.map((comment) {
+                                      // get index
+                                      // var index = comments.indexOf(comment);
+                                      return SingleComment(comment);
+                                    }).toList(),
                                   );
-                                  // return ListView(
-                                  //   children: comments
-                                  //       .map((comment) => Container(
-                                  //           padding: EdgeInsets.all(1.0),
-                                  //           decoration: BoxDecoration(
-                                  //               border: Border.all(
-                                  //                   color: Colors.black12,
-                                  //                   width: 1.0)),
-                                  //           margin:
-                                  //               EdgeInsets.fromLTRB(0, 0, 0, 8),
-                                  //           child: Text(comment['u_name'] +
-                                  //               " - " +
-                                  //               comment['post_comment'])))
-                                  //       .toList(),
-                                  // );
                                 }
                               }
-                            })
+                            }),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        TextField(
+                            controller: _comment,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15.0)),
+                              labelText: 'Post New Comment',
+                            )),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_comment.text == "") {
+                              showAlert(context, "Enter Comment First");
+                            } else {
+                              postComment(_comment.text);
+                            }
+                          },
+                          child: Text("Post"),
+                        )
                       ],
                     );
                   }
                 }
               },
-            )
+            ),
           ]),
         ),
       ),

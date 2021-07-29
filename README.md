@@ -4,7 +4,7 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is all about a blog app where different users can register themselves.After registering, the users are able to post their thoughts in the form of blogs and then different users can reach their posts and react to these posts.
 
 A few resources to get you started if this is your first Flutter project:
 

@@ -34,18 +34,6 @@ class _MyStatefulWidgetState extends State<Blog> {
     }
   }
 
-  // void deleteBlog(id) async {
-  //   var response = await http
-  //       .delete(Uri.parse("http://localhost:3000/user/posts/delete/$id"));
-  //   if (response.statusCode == 200) {
-  //     var result = jsonDecode(response.body);
-  //     showAlert(context, result['message']);
-  //     Future.delayed(Duration(seconds: 1), () {
-  //       setState(() {});
-  //     });
-  //   }
-  // }
-
   // ignore: non_constant_identifier_names
   Widget SingleBlog(record) {
     return Container(
@@ -99,33 +87,6 @@ class _MyStatefulWidgetState extends State<Blog> {
         children: [
           Text(comment['u_name'] + ": " + comment['post_comment']),
           Divider(),
-          // SizedBox(
-          //   height: 10.0,
-          // ),
-          // Row(
-          //   children: [
-          //     TextField(
-          //         controller: _comment,
-          //         decoration: InputDecoration(
-          //             border: OutlineInputBorder(
-          //                 borderRadius: BorderRadius.circular(30.0)),
-          //             prefixIcon: Icon(Icons.alternate_email),
-          //             labelText: 'Email',
-          //             labelStyle: TextStyle(fontWeight: FontWeight.bold))),
-          //     SizedBox(
-          //       width: 7.0,
-          //     ),
-          //     IconButton(
-          //         onPressed: () {
-          //           if (_comment.text == "") {
-          //             showAlert(context, "Enter Comment First");
-          //           } else {
-          //             //
-          //           }
-          //         },
-          //         icon: Icon(Icons.arrow_back_rounded))
-          //   ],
-          // )
         ],
       ),
     );
@@ -139,7 +100,6 @@ class _MyStatefulWidgetState extends State<Blog> {
             headers: <String, String>{'Content-Type': 'application/json'},
             body: json.encode({"comment": comment, "post": post, "user": user}))
         .then((result) {
-      showAlert(context, (json.decode(result.body))['message']);
       setState(() {
         _comment..text = "";
       });
@@ -224,8 +184,6 @@ class _MyStatefulWidgetState extends State<Blog> {
                                   List comments = snapshot.data;
                                   return Column(
                                     children: comments.map((comment) {
-                                      // get index
-                                      // var index = comments.indexOf(comment);
                                       return SingleComment(comment);
                                     }).toList(),
                                   );
